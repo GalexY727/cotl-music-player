@@ -36,24 +36,24 @@ def main():
 
 def prompt_song():
     options_for_user = [
-        'Harry Potter', 
         'Interstellar', 
+        'Minecraft - Subwoofer Lullaby',
+        'Senbonzakura', 
         'Patchwork Staccato', 
         'Rolling Girl', 
-        'Senbonzakura', 
-        'Minecraft - Subwoofer Lullaby',
         'Minecraft - Sweden',
-        'Minecraft - Wet Hands'
+        'Minecraft - Wet Hands',
+        'Harry Potter'
     ]
     options_for_code = [
-        'harry_potter', 
         'interstellar', 
+        'subwoofer_lullaby', 
+        'senbonzakura', 
         'patchwork_staccato', 
         'rolling_girl', 
-        'senbonzakura', 
-        'subwoofer_lullaby', 
         'minecraft_sweden', 
-        'minecraft_wet_hands'
+        'minecraft_wet_hands',
+        'harry_potter'
     ]
     option, index = pick(options_for_user, 'Song choice selector', indicator='\udb83\udf74', default_index=0)
     print(f'You picked {option}')
@@ -71,18 +71,34 @@ def loop(song):
     
     # get the last index in the json to find the song duration
     song_length = song[0]['songNotes'][-1]['time'] # integer (ms)
+
+    last_note_played_timestamp = 0
+    # 86.5
     while stopwatch.duration < song_length/1000:
+        current_duration = stopwatch.duration
         if keyboard.is_pressed('ctrl+backspace'):
             exit()
         if keyboard.is_pressed('backspace'):
             break
-        printProgressBar(stopwatch.duration, song_length/1000, prefix = '', suffix = '', length = 20)
+        if keyboard.is_pressed('-'):
+            print('\nPaused current timestamp: ' + str(last_note_played_timestamp) + '\nPress = to resume\n')
+            stopwatch.stop()
+            keyboard.wait('=')
+            print('Resumed\n')
+            stopwatch.start()            
+        printProgressBar(current_duration, song_length/1000, prefix = '', suffix = '', length = 20)
         # use stopwatch as a timer to play notes
         # get the first item in json that has a 'time' key
         # if time has passed then delete that item and check again
         keysToPress = []
-        while len(song[0]['songNotes']) > 0 and song[0]['songNotes'][0]['time']/1000 <= stopwatch.duration:
-            keysToPress.append(note_to_key[song[0]['songNotes'][0]['key']])
+        while len(song[0]['songNotes']) > 0 and song[0]['songNotes'][0]['time']/1000 <= current_duration:
+            # check if there is a key that contains the json property '1Key'
+            if '1Key' not in song[0]['songNotes'][0]['key']:
+                # turn '2Key' into '1Key'
+                song[0]['songNotes'][0]['key'] = '1' + song[0]['songNotes'][0]['key'][1:]
+            if (current_duration - song[0]['songNotes'][0]['time']/1000) < 0.1:
+                keysToPress.append(note_to_key[song[0]['songNotes'][0]['key']])
+                last_note_played_timestamp = song[0]['songNotes'][0]['time']
             del song[0]['songNotes'][0]
         
         if keysToPress == []:
