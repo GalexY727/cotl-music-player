@@ -2,7 +2,7 @@
 
 The COTL Music Player is a Python-based application designed to play music in Sky: Children of The Light through simulated keyboard inputs. It reads musical notes from JSON files and plays them by pressing keys according to the notes' timings and sequences. This project is inspired by the in-game music sheets and aims to provide a fun and interactive way to practice and enjoy music in game.
 
-![demo](./media/demo.mp4)
+https://github.com/GalexY727/cotl-music-player/assets/65139378/67a402cd-d1e7-44d4-8a9e-5bbd16989713
 
 ## Features
 
