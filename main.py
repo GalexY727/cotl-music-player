@@ -3,6 +3,7 @@ import pyautogui, keyboard, json, time
 from stopwatch import Stopwatch
 from ahk import AHK
 from pick import pick
+from os import listdir
 
 ahk = AHK()
 #Notes to keybinds!!!
@@ -27,7 +28,6 @@ note_to_key = {
 }
 
 stopwatch = Stopwatch(2)
-
 def main():
     print('Starting \ueb44')
     # TODO: Prompt user for song name and determine the json from that
@@ -35,31 +35,16 @@ def main():
         loop(prompt_song())
 
 def prompt_song():
-    options_for_user = [
-        'Interstellar', 
-        'Minecraft - Subwoofer Lullaby',
-        'Senbonzakura', 
-        'Patchwork Staccato', 
-        'Rolling Girl', 
-        'Minecraft - Sweden',
-        'Minecraft - Wet Hands',
-        'Harry Potter'
-    ]
-    options_for_code = [
-        'interstellar', 
-        'subwoofer_lullaby', 
-        'senbonzakura', 
-        'patchwork_staccato', 
-        'rolling_girl', 
-        'minecraft_sweden', 
-        'minecraft_wet_hands',
-        'harry_potter'
-    ]
-    option, index = pick(options_for_user, 'Song choice selector', indicator='\udb83\udf74', default_index=0)
+    options_for_code = [item.replace('.json', '') for item in listdir('songs//')]
+    options_for_code = [options_for_code.pop(options_for_code.index('interstellar'))] + options_for_code
+    
+    option, index = pick([item.replace("_", " ").title() for item in options_for_code], 'Song choice selector', indicator='\udb83\udf74', default_index=0)
     print(f'You picked {option}')
-    json_file = open(f'songs/{options_for_code[index]}.json')
-    song = json.load(json_file)
+    song = ''
+    with open(f'songs/{options_for_code[index]}.json') as json_file:
+        song = json.load(json_file)
     print('Song Loaded!')
+    print('Song length: ' + str(int(song[0]['songNotes'][-1]['time']/1000/60)) + ' minutes ' + str(int(song[0]['songNotes'][-1]['time']/1000%60)) + ' seconds')
     return song
 
 def loop(song):
