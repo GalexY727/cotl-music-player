@@ -22,13 +22,19 @@ https://github.com/GalexY727/cotl-music-player/assets/65139378/67a402cd-d1e7-44d
 
 To use the COTL Music Player, follow these steps:
 
-1. Ensure you have Python installed on your computer.
-2. Clone or download this repository to your local machine.
-3. Navigate to the project directory in your terminal or command prompt.
-4. Run `main.py` using Python to start the application.
-5. Click enter to select a song, (arrow keys to navigate)
-6. Press `\` to start the song playback.
-7. Press `-` to pause, and `=` resume the song playback.
-8. Press `backspace` to stop the song and choose another.
+There are two options to run this program:
+### 1: Running the executable:
+Launch the .exe inside of `./dist/`, and you should be good to go!
+### 2: Running from source: (needs python)
+```
+git clone <repository>
+pip install requirements.txt
+python main.py
+```
+Navigating the UI:
+1. Click enter to select a song, (arrow keys to navigate)
+2. Press `\` to start the song playback.
+3. Press `-` to pause, and `=` resume the song playback.
+4. Press `backspace` to stop the song and choose another.
 
 Enjoy the music!
